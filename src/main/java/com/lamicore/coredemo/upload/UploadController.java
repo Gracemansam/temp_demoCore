@@ -125,4 +125,28 @@ public class UploadController {
         return "Module installed and executed successfully!";
     }
 
+    @PostMapping("/launch")
+    public ResponseEntity<String> launchSpringBootApplication(@RequestBody PathDto pathToJar) {
+        // Check if the path is not empty
+//        if (pathToJar == null || pathToJar.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body("Path to JAR file must be provided.");
+//        }
+
+        // Check if the file exists at the specified path
+//        if (!Files.exists(Paths.get(pathToJar))) {
+//            System.out.println(pathToJar);
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body("File not found at the specified path.");
+//        }
+
+        try {
+            moduleClassloader.loadJar (pathToJar.getPathToJar());
+            return ResponseEntity.ok("Spring Boot application launched successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to launch Spring Boot application. Check logs for details.");
+        }
+    }
 }
